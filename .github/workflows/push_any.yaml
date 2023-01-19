@@ -15,4 +15,4 @@ jobs:
 
   test:
     needs: build
-    users: ./.github/workflows/test.yaml
+    uses: ./.github/workflows/test.yaml

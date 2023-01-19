@@ -1,4 +1,4 @@
-name: Test
+name: Tests
 
 on:
   workflow_call:
@@ -9,7 +9,7 @@ env:
 
 jobs:
 
-  test:
+  tests:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository
@@ -42,7 +42,7 @@ jobs:
             oci-archive:"${{ env.IMAGE_NAME }}_${version}_amd64.rock" \
             docker-daemon:"${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}"
 
-      - name: Test
+      - name: Tests
         run: |
           docker run --name nginx -p 8080:80 -d ${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}
           cd tests && tox -e integration
