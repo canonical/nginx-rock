@@ -44,5 +44,6 @@ jobs:
 
       - name: Tests
         run: |
-          docker run --name nginx -p 8080:80 -d ${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}
+          version="$(cat rockcraft.yaml | yq e '.version')"
+          docker run -d -p 8080:80 ${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}
           cd tests && tox -e integration
