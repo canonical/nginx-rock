@@ -12,3 +12,7 @@ on:
 jobs:
   build:
     uses: ./.github/workflows/build.yaml
+
+  test:
+    needs: build
+    users: ./.github/workflows/test.yaml
