@@ -20,8 +20,6 @@ parts:
       - libssl-dev
       - zlib1g-dev
     stage-packages:
-      - libpcre3-dev
-      - libssl-dev
       - ca-certificates
     autotools-configure-parameters:
       - --prefix=/var/www/html
