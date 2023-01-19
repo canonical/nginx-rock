@@ -42,6 +42,10 @@ jobs:
             oci-archive:"${{ env.IMAGE_NAME }}_${version}_amd64.rock" \
             docker-daemon:"${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}"
 
+      - name: Install tox
+        run: |
+          pip install tox
+
       - name: Tests
         run: |
           version="$(cat rockcraft.yaml | yq e '.version')"
