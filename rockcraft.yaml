@@ -8,10 +8,9 @@ license: Apache-2.0
 platforms:
   amd64:
 
-cmd: ["nginx", "-g", "daemon off;"]
+cmd: ["nginx"]
 
 parts:
-
   nginx:
     plugin: autotools
     source: https://nginx.org/download/nginx-1.23.3.tar.gz
