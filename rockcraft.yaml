@@ -20,7 +20,7 @@ parts:
       - libssl-dev
       - zlib1g-dev
     stage-packages:
-      - ca-certificates
+      - ca-certificates_data
     autotools-configure-parameters:
       - --prefix=/var/www/html
       - --sbin-path=/usr/sbin/nginx
