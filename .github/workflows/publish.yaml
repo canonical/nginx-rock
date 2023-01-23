@@ -41,5 +41,5 @@ jobs:
             --insecure-policy \
             copy \
             oci-archive:"${{ env.IMAGE_NAME }}_${version}_amd64.rock" \
-            docker-daemon:"${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}"
+            docker://${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}
           docker push ${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}
