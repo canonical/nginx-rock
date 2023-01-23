@@ -1,0 +1,39 @@
+name: nginx
+version: "1.23.3"
+build-base: ubuntu:22.04
+base: ubuntu:22.04
+summary: nginx web server
+description: nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server.
+license: Apache-2.0
+platforms:
+  amd64:
+
+cmd: ["nginx", "-g", "daemon off;"]
+
+parts:
+  nginx:
+    plugin: autotools
+    source: https://nginx.org/download/nginx-1.23.3.tar.gz
+    build-packages:
+      - libgd-dev
+      - libpcre3-dev
+      - libssl-dev
+      - zlib1g-dev
+    stage-packages:
+      - ca-certificates_data
+    autotools-configure-parameters:
+      - --prefix=/var/www/html
+      - --sbin-path=/usr/sbin/nginx
+      - --conf-path=/etc/nginx/nginx.conf
+      - --http-log-path=/var/log/nginx/access.log
+      - --error-log-path=/var/log/nginx/error.log
+      - --with-pcre
+      - --lock-path=/var/lock/nginx.lock
+      - --pid-path=/var/run/nginx.pid
+      - --with-http_ssl_module
+      - --with-http_image_filter_module=dynamic
+      - --modules-path=/etc/nginx/modules
+      - --with-http_v2_module
+      - --with-stream=dynamic
+      - --with-http_addition_module
+      - --with-http_mp4_module

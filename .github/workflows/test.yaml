@@ -1,0 +1,47 @@
+name: Tests
+
+on:
+  workflow_call:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: nginx
+
+jobs:
+
+  tests:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install skopeo
+        run: |
+          sudo snap install --devmode --channel edge skopeo
+
+      - name: Install yq
+        run: |
+          sudo snap install yq
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: nginx-rock
+
+      - name: Import
+        run: |
+          version="$(cat rockcraft.yaml | yq e '.version')"
+          sudo skopeo \
+            --insecure-policy \
+            copy \
+            oci-archive:"${{ env.IMAGE_NAME }}_${version}_amd64.rock" \
+            docker-daemon:"${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}"
+
+      - name: Install tox
+        run: |
+          pip install tox
+
+      - name: Tests
+        run: |
+          version="$(cat rockcraft.yaml | yq e '.version')"
+          docker run -d -p 8080:80 ${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}
+          cd tests && tox -e integration

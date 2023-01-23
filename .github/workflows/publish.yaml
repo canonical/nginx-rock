@@ -1,0 +1,45 @@
+name: Publish
+
+on:
+  workflow_call:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: nginx
+
+jobs:
+
+  publish:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install skopeo
+        run: |
+          sudo snap install --devmode --channel edge skopeo
+
+      - name: Install yq
+        run: |
+          sudo snap install yq
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: nginx-rock
+
+      - name: Import and push to github package
+        run: |
+          version="$(cat rockcraft.yaml | yq e '.version')"
+          sudo skopeo \
+            --insecure-policy \
+            copy \
+            oci-archive:"${{ env.IMAGE_NAME }}_${version}_amd64.rock" \
+            docker-daemon:"${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}"
+          docker push ${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}
