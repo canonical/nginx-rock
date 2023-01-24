@@ -14,8 +14,6 @@ parts:
 
   nginx-user:
     plugin: nil
-    build-packages:
-      - bash
     overlay-script: |
       set -x
       chroot $CRAFT_OVERLAY
