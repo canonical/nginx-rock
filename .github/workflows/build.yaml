@@ -10,19 +10,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup LXD
-        uses: canonical/setup-lxd@90d76101915da56a42a562ba766b1a77019242fd
-        with:
-          channel: 5.10/stable
+      - uses: canonical/craft-actions/rockcraft-pack@main
+        id: rockcraft
 
-      - name: Install rockcraft
-        run: |
-          sudo snap install --classic --channel edge rockcraft
-      - name: Build ROCK
-        run: rockcraft pack --verbose
-
-      - name: Upload locally built ROCK artifact
-        uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v3
         with:
-          name: nginx-rock
-          path: "nginx_*.rock"
+          name: rock
+          path: ${{ steps.rockcraft.outputs.rock }}
