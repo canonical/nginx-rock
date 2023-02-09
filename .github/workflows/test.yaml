@@ -3,10 +3,6 @@ name: Tests
 on:
   workflow_call:
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: nginx
-
 jobs:
 
   tests:
@@ -25,16 +21,18 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: nginx-rock
+          name: rock
 
       - name: Import
         run: |
-          version="$(cat rockcraft.yaml | yq e '.version')"
+          image_name="$(yq '.name' rockcraft.yaml)"
+          version="$(yq '.version' rockcraft.yaml)"
+          rock_file=$(ls *.rock | tail -n 1)
           sudo skopeo \
             --insecure-policy \
             copy \
-            oci-archive:"${{ env.IMAGE_NAME }}_${version}_amd64.rock" \
-            docker-daemon:"${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}"
+            oci-archive:"${rock_file}" \
+            docker-daemon:"ghcr.io/canonical/${image_name}:${version}"
 
       - name: Install tox
         run: |
@@ -42,6 +40,7 @@ jobs:
 
       - name: Tests
         run: |
-          version="$(cat rockcraft.yaml | yq e '.version')"
-          docker run -d -p 8080:80 ${{ env.REGISTRY }}/canonical/${{ env.IMAGE_NAME }}:${version}
+          image_name="$(yq '.name' rockcraft.yaml)"
+          version="$(yq '.version' rockcraft.yaml)"
+          docker run -d -p 8080:80 ghcr.io/canonical/${image_name}:${version}
           cd tests && tox -e integration
