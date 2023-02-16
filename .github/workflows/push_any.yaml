@@ -16,3 +16,7 @@ jobs:
   test:
     needs: build
     uses: ./.github/workflows/test.yaml
+
+  scan:
+    needs: build
+    uses: ./.github/workflows/scan.yaml
