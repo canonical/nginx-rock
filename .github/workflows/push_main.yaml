@@ -12,6 +12,16 @@ jobs:
   build:
     uses: ./.github/workflows/build.yaml
 
-  publish:
+  test:
     needs: build
+    uses: ./.github/workflows/test.yaml
+
+  scan:
+    needs: build
+    uses: ./.github/workflows/scan.yaml
+
+  publish:
+    needs:
+      - test
+      - scan
     uses: ./.github/workflows/publish.yaml
