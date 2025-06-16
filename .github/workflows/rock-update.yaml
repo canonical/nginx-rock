@@ -1,0 +1,24 @@
+name: Update rock
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  build:
+    uses: canonical/observability/.github/workflows/rock-update.yaml@v1
+    with:
+      rock-name: nginx
+      source-repo: nginx/nginx
+      check-go: true
+      update-script: |
+        # The caller must provide \$application_src and \$rockcraft_yaml
+        #   \$application_src: The root folder of the cloned upstream project
+        #   \$rockcraft_yaml: Path of the rockcraft.yaml to update
+        #
+        ## Update the version of the downloaded source
+        version="$(yq -i "$rockcraft_yaml")"
+        yq -i ".parts.nginx.source = \"https://nginx.org/download/nginx-${version}.tar.gz\"" $rockcraft_yaml
+        ver="\$node_version" yq -i '.parts.prometheus.build-snaps += "node/"+strenv(ver)+"/stable"' "\$rockcraft_yaml"
+    secrets: inherit
