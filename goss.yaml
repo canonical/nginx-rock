@@ -1,0 +1,7 @@
+process:
+  nginx:
+    running: true
+http:
+  config:
+    status: 200
+    url: http://localhost
