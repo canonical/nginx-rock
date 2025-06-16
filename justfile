@@ -17,7 +17,7 @@ push-to-registry version:
     "docker://localhost:32000/${rock_name}-dev:${version}"
 
 # Pack a rock of a specific version
-pack version:
+pack version=latest_version:
   cd "$version" && rockcraft pack
 
 # `rockcraft clean` for a specific version
