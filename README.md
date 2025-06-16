@@ -1,14 +1,5 @@
 # nginx Rock
 
-OCI image for [nginx](https://www.nginx.com/) based on Ubuntu 22.04 built using [rockcraft](https://github.com/canonical/rockcraft). 
-
-## Usage
-
-```bash
-docker pull ghcr.io/canonical/nginx:1.23.3
-docker run -it ghcr.io/canonical/nginx:1.23.3
-```
-
 [![Open a PR to OCI Factory](https://github.com/canonical/nginx-rock/actions/workflows/rock-release-oci-factory.yaml/badge.svg)](https://github.com/canonical/nginx-rock/actions/workflows/rock-release-oci-factory.yaml)
 [![Publish to GHCR:dev](https://github.com/canonical/nginx-rock/actions/workflows/rock-release-dev.yaml/badge.svg)](https://github.com/canonical/nginx-rock/actions/workflows/rock-release-dev.yaml)
 [![Update rock](https://github.com/canonical/nginx-rock/actions/workflows/rock-update.yaml/badge.svg)](https://github.com/canonical/nginx-rock/actions/workflows/rock-update.yaml)
