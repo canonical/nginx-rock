@@ -39,6 +39,7 @@ parts:
       - --with-stream=dynamic
       - --with-http_addition_module
       - --with-http_mp4_module
+      - --with-http_stub_status_module
     override-build: |
       set -x
       craftctl default
