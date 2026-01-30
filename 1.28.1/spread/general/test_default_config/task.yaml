@@ -1,0 +1,15 @@
+summary: Create all-defaults nginx container
+
+execute: |
+
+  # Clean up on exit
+  trap "docker stop nginx-rock >/dev/null 2>&1 || true" EXIT
+
+  # Run the Nginx container
+  docker run -d --rm --name nginx-rock -p 48080:80 nginx:1.28-26.04
+
+  # Wait for port 48080 to be ready
+  sleep 5
+
+  # Test Nginx is responding
+  curl -sS http://127.0.0.1:48080 | grep -Fq "Welcome to nginx!"

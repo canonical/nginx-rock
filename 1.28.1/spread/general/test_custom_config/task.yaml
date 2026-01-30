@@ -1,0 +1,25 @@
+summary: Create an nginx container with custom configuration
+
+execute: |
+
+  # Clean up on exit
+  trap "docker stop nginx-rock >/dev/null 2>&1 || true" EXIT
+
+  # Run the Apache2 container
+  docker run -d --rm --name nginx-rock -p 48080:80 \
+    -v $(pwd)/html:/srv/www/html:ro \
+    -v $(pwd)/nginx_simple.conf:/etc/nginx/nginx.conf:ro \
+    nginx:1.28-26.04
+
+  # Wait for port 48080 to be ready
+  sleep 5
+
+  # Get checksums of original and retrieved file
+  orig_checksum=$(md5sum $(pwd)/html/index.html | awk '{print $1}')
+  retrieved_checksum=$(curl -sS http://127.0.0.1:48080 | md5sum | awk '{print $1}')
+
+  # Check that the checksums match
+  if [ "$orig_checksum" != "$retrieved_checksum" ]; then
+    echo "Checksum mismatch: original ($orig_checksum) vs retrieved ($retrieved_checksum)"
+    exit 1
+  fi
