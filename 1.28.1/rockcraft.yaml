@@ -38,6 +38,7 @@ parts:
       - nginx_bins
       - nginx-common_index
       # Required for tests
+      # See: https://github.com/canonical/nginx-rock/issues/33
       - tar_tar
       - dash_bins
       - coreutils_chmod
