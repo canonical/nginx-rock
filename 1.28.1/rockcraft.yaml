@@ -37,6 +37,10 @@ parts:
       - base-passwd_data
       - nginx_bins
       - nginx-common_index
+      # Required for tests
+      - tar_tar
+      - dash_bins
+      - coreutils_chmod
 
   deb-security-manifest:
     plugin: make
