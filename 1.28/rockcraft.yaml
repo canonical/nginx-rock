@@ -1,5 +1,5 @@
 name: nginx
-version: "1.28.1"
+version: "1.28"
 license: Apache-2.0
 
 summary: A high-performance reverse proxy & web server, based on Ubuntu

@@ -1,4 +1,4 @@
-project: nginx:1.28.1-26.04
+project: nginx:1.28-26.04
 
 backends:
   craft:
