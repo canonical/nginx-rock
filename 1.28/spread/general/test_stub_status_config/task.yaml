@@ -1,0 +1,22 @@
+summary: Create an nginx container with stub_status endpoint
+
+execute: |
+  set -euxo pipefail
+
+  trap "docker stop nginx-rock >/dev/null 2>&1 || true" EXIT
+
+  docker run -d --rm --name nginx-rock -p 48080:80 \
+    -v $(pwd)/nginx_stub_status.conf:/etc/nginx/nginx.conf:ro \
+    nginx:1.28-26.04
+
+  # wait for nginx
+  sleep 5
+
+  # fetch the stub_status page and check for expected content
+  status=$(curl -sS http://127.0.0.1:48080/status)
+  echo "$status" | grep -q "Active connections"
+  echo "$status" | grep -q "server accepts handled requests"
+
+  # compile-time check
+  docker exec nginx-rock nginx -V 2>&1 | grep -q http_stub_status
+
