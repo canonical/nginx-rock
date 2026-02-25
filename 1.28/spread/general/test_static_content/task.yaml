@@ -12,11 +12,13 @@ execute: |
   timeout 30 bash -c 'until curl -sSf http://127.0.0.1:48080/test.txt >/dev/null; do sleep 1; done'
 
   # Get checksums of original and retrieved file
+  response=$(curl -sS http://127.0.0.1:48080/test.txt)
   orig_checksum=$(md5sum $(pwd)/static/test.txt | awk '{print $1}')
-  retrieved_checksum=$(curl -sS http://127.0.0.1:48080/test.txt | md5sum | awk '{print $1}')
+  retrieved_checksum=$(printf "%s" "$response" | md5sum | awk '{print $1}')
 
   # Check that the checksums match
   if [ "$orig_checksum" != "$retrieved_checksum" ]; then
     echo "Checksum mismatch: original ($orig_checksum) vs retrieved ($retrieved_checksum)"
+    echo "Response content: $response"
     exit 1
   fi

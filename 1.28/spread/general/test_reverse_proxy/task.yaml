@@ -17,12 +17,14 @@ execute: |
   timeout 30 bash -c 'until curl -sSf http://127.0.0.1:48080 >/dev/null; do sleep 1; done'
 
   # Get checksums of original and retrieved file
+  response=$(curl -sS http://127.0.0.1:48080)
   orig_checksum=$(md5sum $(pwd)/html/index.html | awk '{print $1}')
-  retrieved_checksum=$(curl -sS http://127.0.0.1:48080 | md5sum | awk '{print $1}')
+  retrieved_checksum=$(printf "%s" "$response" | md5sum | awk '{print $1}')
 
   # Check that the checksums match
   if [ "$orig_checksum" != "$retrieved_checksum" ]; then
     echo "Checksum mismatch: original ($orig_checksum) vs retrieved ($retrieved_checksum)"
+    echo "Response content: $response"
     exit 1
   fi
 
@@ -36,10 +38,12 @@ execute: |
   timeout 30 bash -c 'until curl -sSf http://127.0.0.1:48070 >/dev/null; do sleep 1; done'
 
   # Get checksums of original and retrieved file via the reverse proxy
-  proxied_retrieved_checksum=$(curl -sS http://127.0.0.1:48070 | md5sum | awk '{print $1}')
+  proxied_response=$(curl -sS http://127.0.0.1:48070)
+  proxied_retrieved_checksum=$(printf "%s" "$proxied_response" | md5sum | awk '{print $1}')
 
   # Check that the checksums match
   if [ "$orig_checksum" != "$proxied_retrieved_checksum" ]; then
     echo "Checksum mismatch via reverse proxy: original ($orig_checksum) vs retrieved ($proxied_retrieved_checksum)"
+    echo "Proxied response content: $proxied_response"
     exit 1
   fi
