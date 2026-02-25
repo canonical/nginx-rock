@@ -9,8 +9,8 @@ execute: |
     -v $(pwd)/nginx_stub_status.conf:/etc/nginx/nginx.conf:ro \
     nginx:1.28-26.04
 
-  # wait for nginx
-  sleep 5
+  # Wait for Nginx to be ready (timeout after 30 seconds)
+  timeout 30 bash -c 'until curl -sSf http://127.0.0.1:48080 >/dev/null; do sleep 1; done'
 
   # fetch the stub_status page and check for expected content
   status=$(curl -sS http://127.0.0.1:48080/status)

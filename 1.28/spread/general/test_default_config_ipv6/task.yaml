@@ -8,8 +8,8 @@ execute: |
   # Run the Nginx container
   docker run -d --rm --name nginx-rock -p 48080:80 nginx:1.28-26.04
 
-  # Wait for port 48080 to be ready
-  sleep 5
+  # Wait for Nginx to be ready (timeout after 30 seconds)
+  timeout 30 bash -c 'until curl -sSf http://127.0.0.1:48080 >/dev/null; do sleep 1; done'
 
   # Test Nginx is responding
   curl -sS http://[::1]:48080 | grep -Fq "Welcome to nginx!"
