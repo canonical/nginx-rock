@@ -1,0 +1,46 @@
+name: nginx
+version: "release-1.29.5"
+license: Apache-2.0
+summary: A high-performance reverse proxy & web server, based on Ubuntu
+description: |
+  Nginx ("engine X") is a high-performance web and reverse proxy server
+  created by Igor Sysoev. It can be used both as a standalone web server
+  and as a proxy to reduce the load on back-end HTTP or mail servers.
+environment:
+  PEBBLE_PERSIST: never # Allow running in read-only mode
+base: bare
+# TODO change to 26.04 once 26.04 is officially released
+build-base: devel
+platforms:
+  amd64:
+  arm64:
+  ppc64el:
+  s390x:
+services:
+  nginx:
+    override: replace
+    command: nginx -g 'daemon off;'
+    startup: enabled
+parts:
+  nginx:
+    plugin: nil
+    stage-packages:
+      - base-files_base
+      - base-files_chisel
+      - base-files_release-info
+      - base-passwd_data
+      - nginx_bins
+      - nginx-common_index
+      # Required for tests
+      # See: https://github.com/canonical/nginx-rock/issues/33
+      - tar_tar
+      - dash_bins
+      - coreutils_chmod
+    source-tag: release-1.29.5
+    source: https://nginx.org/download/nginx-.tar.gz
+  deb-security-manifest:
+    plugin: make
+    source: https://github.com/canonical/rocks-security-manifest
+    source-type: git
+    source-branch: main
+    override-prime: gen_manifest
