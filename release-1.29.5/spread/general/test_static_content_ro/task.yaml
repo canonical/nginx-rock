@@ -1,0 +1,32 @@
+summary: Create an nginx container serving static content read-only
+
+execute: |
+
+  # Clean up on exit
+  trap "docker stop nginx-rock >/dev/null 2>&1 || true" EXIT
+
+  # Create tmp cache dir
+  nginx_scratch=$(mktemp -d  /tmp/nginx-cache-XXXXXXX)
+
+  # Run the Nginx container
+  docker run -d --rm --name nginx-rock -p 48080:80 --read-only \
+    -v $nginx_scratch:/var/lib/nginx \
+    -v "$nginx_scratch:/var/log/nginx" \
+    -v "$nginx_scratch:/var/run" \
+    -v $(pwd)/static:/var/www/html:ro \
+    nginx:1.28-26.04
+
+  # Wait for Nginx to be ready (timeout after 30 seconds)
+  timeout 30 bash -c 'until curl -sSf http://127.0.0.1:48080/test.txt >/dev/null; do sleep 1; done'
+
+  # Get checksums of original and retrieved file
+  response=$(curl -sS http://127.0.0.1:48080/test.txt)
+  orig_checksum=$(md5sum $(pwd)/static/test.txt | awk '{print $1}')
+  retrieved_checksum=$(printf "%s" "$response" | md5sum | awk '{print $1}')
+
+  # Check that the checksums match
+  if [ "$orig_checksum" != "$retrieved_checksum" ]; then
+    echo "Checksum mismatch: original ($orig_checksum) vs retrieved ($retrieved_checksum)"
+    echo "Response content: $response"
+    exit 1
+  fi
