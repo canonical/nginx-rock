@@ -1,8 +1,8 @@
 # nginx Rock
 
-[![Open a PR to OCI Factory](https://github.com/canonical/nginx-rock/actions/workflows/rock-release-oci-factory.yaml/badge.svg)](https://github.com/canonical/nginx-rock/actions/workflows/rock-release-oci-factory.yaml)
-[![Publish to GHCR:dev](https://github.com/canonical/nginx-rock/actions/workflows/rock-release-dev.yaml/badge.svg)](https://github.com/canonical/nginx-rock/actions/workflows/rock-release-dev.yaml)
-[![Update rock](https://github.com/canonical/nginx-rock/actions/workflows/rock-update.yaml/badge.svg)](https://github.com/canonical/nginx-rock/actions/workflows/rock-update.yaml)
+[![Open a PR to OCI Factory](https://github.com/canonical/nginx-rock/actions/workflows/release-oci-factory.yaml/badge.svg)](https://github.com/canonical/nginx-rock/actions/workflows/release-oci-factory.yaml)
+[![Publish to GHCR:dev](https://github.com/canonical/nginx-rock/actions/workflows/release-dev.yaml/badge.svg)](https://github.com/canonical/nginx-rock/actions/workflows/release-dev.yaml)
+[![Update rock](https://github.com/canonical/nginx-rock/actions/workflows/update.yaml/badge.svg)](https://github.com/canonical/nginx-rock/actions/workflows/update.yaml)
 
 [Rocks](https://canonical-rockcraft.readthedocs-hosted.com/en/latest/) for [Nginx](https://nginx.com/).  
 This repository holds all the necessary files to build rocks for the upstream versions we support. The Nginx rock is used by the Observability HA charms (Loki, Mimir and Tempo).

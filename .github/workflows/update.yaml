@@ -1,0 +1,14 @@
+name: Update rock
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 0 * * 1'
+
+jobs:
+  update:
+    name: Update rock
+    uses: canonical/observability/.github/workflows/rock-update.yaml@v2
+    secrets: inherit
+    with:
+      source-repo: nginx/nginx
