@@ -1,4 +1,4 @@
-project: nginx:1.28-26.04
+project: rock
 
 backends:
   craft:
@@ -10,23 +10,30 @@ backends:
 suites:
   spread/general/:
     summary: General integration tests
+    environment:
+      # Goss environment
+      GOSS_OPTS: "--retry-timeout=60s"
+      GOSS_FILES_STRATEGY: cp
+      DGOSS_TEMP_DIR: "$HOME"
 
     prepare: |
+      # Install dependencies
       sudo snap install docker
+      curl -fsSL https://goss.rocks/install | sh
 
       # For 'rockcraft.skopeo'
       sudo snap install --classic rockcraft
 
       # Wait for docker daemon to come online
       sudo apt install --yes retry
-      retry --times=10 --delay 2 -- docker images
+      retry --times=10 --delay 2 -- docker run hello-world
       sudo apt remove --yes retry
 
       # Load the rock into docker
-      sudo rockcraft.skopeo --insecure-policy copy "oci-archive:$CRAFT_ARTIFACT" docker-daemon:nginx:1.28-26.04
-
+      sudo rockcraft.skopeo --insecure-policy copy "oci-archive:$CRAFT_ARTIFACT" docker-daemon:rockcraft-test:latest
+      
     restore: |
-      docker image rm --force nginx:1.28-26.04
+      docker image rm --force rockcraft-test:latest
 
 exclude:
   - .git
