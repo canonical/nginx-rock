@@ -14,7 +14,7 @@ execute: |
     -v "$nginx_scratch:/var/log/nginx" \
     -v "$nginx_scratch:/var/run" \
     -v $(pwd)/static:/var/www/html:ro \
-    nginx:1.28-26.04
+    rockcraft-test:latest
 
   # Wait for Nginx to be ready (timeout after 30 seconds)
   timeout 30 bash -c 'until curl -sSf http://127.0.0.1:48080/test.txt >/dev/null; do sleep 1; done'
