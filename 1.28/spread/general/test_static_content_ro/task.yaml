@@ -13,6 +13,7 @@ execute: |
     -v $nginx_scratch:/var/lib/nginx \
     -v "$nginx_scratch:/var/log/nginx" \
     -v "$nginx_scratch:/var/run" \
+    -v "$nginx_scratch:/tmp" \
     -v $(pwd)/static:/var/www/html:ro \
     rockcraft-test:latest
 
