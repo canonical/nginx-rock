@@ -8,12 +8,11 @@ execute: |
   # Create tmp cache dir
   nginx_scratch=$(mktemp -d /tmp/nginx-cache-XXXXXXX)
 
-  # Run the Nginx container
-  # --read-only makes the rootfs read-only; writable paths must be mounted.
-  # Pebble (entrypoint) needs /var/lib/pebble writable for runtime state.
-  # Nginx needs /var/lib/nginx, /var/log/nginx, /var/run, and /tmp.
+  # Run the Nginx container in read-only mode.
+  # Use an anonymous volume for pebble state so layer files from the image
+  # are preserved (tmpfs would clobber /var/lib/pebble/default/layers/).
   docker run -d --name nginx-rock -p 48080:80 --read-only \
-    --tmpfs /var/lib/pebble \
+    -v /var/lib/pebble/default \
     --tmpfs /tmp \
     --tmpfs /run \
     -v "$nginx_scratch:/var/lib/nginx" \
