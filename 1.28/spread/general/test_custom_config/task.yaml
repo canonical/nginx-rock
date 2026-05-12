@@ -9,7 +9,7 @@ execute: |
   docker run -d --rm --name nginx-rock -p 48080:80 \
     -v $(pwd)/html:/srv/www/html:ro \
     -v $(pwd)/nginx_simple.conf:/etc/nginx/nginx.conf:ro \
-    nginx:1.28-26.04
+    rockcraft-test:latest
 
   # Wait for Nginx to be ready (timeout after 30 seconds)
   timeout 30 bash -c 'until curl -sSf http://127.0.0.1:48080 >/dev/null; do sleep 1; done'

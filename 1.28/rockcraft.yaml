@@ -12,8 +12,7 @@ environment:
   PEBBLE_PERSIST: never # Allow running in read-only mode
 
 base: bare
-# TODO change to 26.04 once 26.04 is officially released
-build-base: devel
+build-base: ubuntu@26.04
 
 platforms:
   amd64:

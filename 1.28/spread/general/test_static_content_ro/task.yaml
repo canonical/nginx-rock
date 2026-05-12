@@ -2,19 +2,23 @@ summary: Create an nginx container serving static content read-only
 
 execute: |
 
-  # Clean up on exit
-  trap "docker stop nginx-rock >/dev/null 2>&1 || true" EXIT
+  # Clean up on exit (no --rm so we can capture logs on failure)
+  trap "docker logs nginx-rock 2>/dev/null; docker rm -f nginx-rock >/dev/null 2>&1 || true" EXIT
 
   # Create tmp cache dir
-  nginx_scratch=$(mktemp -d  /tmp/nginx-cache-XXXXXXX)
+  nginx_scratch=$(mktemp -d /tmp/nginx-cache-XXXXXXX)
 
-  # Run the Nginx container
-  docker run -d --rm --name nginx-rock -p 48080:80 --read-only \
-    -v $nginx_scratch:/var/lib/nginx \
+  # Run the Nginx container in read-only mode.
+  # Use an anonymous volume for pebble state so layer files from the image
+  # are preserved (tmpfs would clobber /var/lib/pebble/default/layers/).
+  docker run -d --name nginx-rock -p 48080:80 --read-only \
+    -v /var/lib/pebble/default \
+    --tmpfs /tmp \
+    --tmpfs /run \
+    -v "$nginx_scratch:/var/lib/nginx" \
     -v "$nginx_scratch:/var/log/nginx" \
-    -v "$nginx_scratch:/var/run" \
-    -v $(pwd)/static:/var/www/html:ro \
-    nginx:1.28-26.04
+    -v "$(pwd)/static:/var/www/html:ro" \
+    rockcraft-test:latest
 
   # Wait for Nginx to be ready (timeout after 30 seconds)
   timeout 30 bash -c 'until curl -sSf http://127.0.0.1:48080/test.txt >/dev/null; do sleep 1; done'

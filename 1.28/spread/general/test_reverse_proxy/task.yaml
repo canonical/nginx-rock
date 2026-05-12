@@ -11,7 +11,7 @@ execute: |
   docker run -d --rm --name nginx-backend-rock -p 48080:80 \
     -v $(pwd)/html:/var/www/html:ro \
     --network test-network \
-    nginx:1.28-26.04
+    rockcraft-test:latest
 
   # Wait for Nginx to be ready (timeout after 30 seconds)
   timeout 30 bash -c 'until curl -sSf http://127.0.0.1:48080 >/dev/null; do sleep 1; done'
@@ -32,7 +32,7 @@ execute: |
   docker run -d --rm --name nginx-proxy-rock -p 48070:48070 \
     -v $(pwd)/nginx_reverse_proxy.conf:/etc/nginx/nginx.conf:ro \
     --network test-network \
-    nginx:1.28-26.04
+    rockcraft-test:latest
 
   # Wait for Nginx to be ready (timeout after 30 seconds)
   timeout 30 bash -c 'until curl -sSf http://127.0.0.1:48070 >/dev/null; do sleep 1; done'
