@@ -2,7 +2,7 @@ name: nginx
 summary: nginx web server
 description: nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server.
 version: "1.27.5"
-base: ubuntu@24.04
+base: ubuntu@26.04
 license: Apache-2.0
 services:
   nginx:
@@ -17,11 +17,11 @@ parts:
     source: https://nginx.org/download/nginx-1.27.5.tar.gz
     build-packages:
       - libgd-dev
-      - libpcre3-dev
+      - libpcre2-dev
       - libssl-dev
       - zlib1g-dev
     stage-packages:
-      - libpcre3-dev
+      - libpcre2-dev
     autotools-configure-parameters:
       - --prefix=/usr/share/nginx
       - --user=nginx
