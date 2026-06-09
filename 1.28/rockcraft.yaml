@@ -38,6 +38,7 @@ parts:
       - nginx-common_index
       # Required by charms
       - ca-certificates_data
+      - ca-certificates_bins
       # Required for tests
       # See: https://github.com/canonical/nginx-rock/issues/33
       - tar_tar
