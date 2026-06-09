@@ -36,6 +36,8 @@ parts:
       - base-passwd_data
       - nginx_bins
       - nginx-common_index
+      # Required by charms
+      - ca-certificates_data
       # Required for tests
       # See: https://github.com/canonical/nginx-rock/issues/33
       - tar_tar
