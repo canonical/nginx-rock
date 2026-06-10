@@ -37,7 +37,7 @@ parts:
       - nginx_bins
       - nginx-common_index
       # Required by charms
-      - ca-certificates_data
+      - ca-certificates_data-with-certs
       - ca-certificates_scripts
       # Required for tests
       # See: https://github.com/canonical/nginx-rock/issues/33
