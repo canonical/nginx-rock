@@ -2,6 +2,8 @@ set allow-duplicate-recipes
 set allow-duplicate-variables
 import? 'rocks.just'
 
+source_repo := 'nginx/nginx'
+
 [private]
 @default:
   just --list
