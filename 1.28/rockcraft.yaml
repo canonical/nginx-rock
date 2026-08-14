@@ -1,31 +1,25 @@
 name: nginx
-version: "1.28"
+version: "1.28.3"
 license: Apache-2.0
-
 summary: A high-performance reverse proxy & web server, based on Ubuntu
 description: |
   Nginx ("engine X") is a high-performance web and reverse proxy server
   created by Igor Sysoev. It can be used both as a standalone web server
   and as a proxy to reduce the load on back-end HTTP or mail servers.
-
 environment:
   PEBBLE_PERSIST: never # Allow running in read-only mode
-
 base: bare
 build-base: ubuntu@26.04
-
 platforms:
   amd64:
   arm64:
   ppc64el:
   s390x:
-
 services:
   nginx:
     override: replace
     command: nginx -g 'daemon off;'
     startup: enabled
-    
 parts:
   nginx:
     plugin: nil
@@ -44,7 +38,7 @@ parts:
       - tar_tar
       - dash_bins
       - coreutils_chmod
-
+    source-tag: release-1.28.3
   deb-security-manifest:
     plugin: make
     source: https://github.com/canonical/rocks-security-manifest
